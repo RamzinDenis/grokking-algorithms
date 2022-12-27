@@ -8,26 +8,25 @@ graph["peggy"] = [];
 graph["thom"] = [];
 graph["jonny"] = [];
 
-checkIfSeller = (name) => {
-  return name[name.length - 1] === "m";
-};
+const checkIfSeller = (name, seller) => name === seller;
 
 const search = (name) => {
-  let searchQueue = [];
-  searchQueue = searchQueue.concat(graph[name]);
+  const searchQueue = graph["you"];
   const searched = [];
+
   while (searchQueue.length) {
-    let person = searchQueue.shift();
-    if (searched.indexOf(person) === -1) {
-      //Checking indexOf(whateverUrCheckin) will return -1 if that value doesn't occur in the array.
-      if (checkIfSeller(person)) {
-        console.log(`${person} is a mango seller!`);
-        return true;
-      } else {
-        searchQueue = searchQueue.concat(graph[person]);
-        searched.push(person);
-      }
+    const person = searchQueue.shift();
+
+    if (searched.includes(person)) continue;
+
+    if (checkIfSeller(name, person)) return true;
+    else {
+      searchQueue.push(...graph[person]);
+      searched.push(person);
     }
   }
+
   return false;
 };
+
+console.log(search("an"));

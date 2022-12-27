@@ -1,20 +1,9 @@
-// function sum(arr) {
-//   if (!arr.length) return 0;
+/* 
+goes down to basic case, returns 0
 
-//   return arr[0] + sum(arr.slice(1));
-// }
+goes up and compare 0 with the first element, than if it bigger goes more upward and continue comparison
 
-// const testingArr = [1, 2, 3, 4];
-
-// console.log(sum(testingArr));
-
-// function factorial(n) {
-//   if (n === 1) return n;
-
-//   return n * factorial(n - 1);
-// }
-
-/* То есть у нас функция суммы должна быть следующая return arr[0] + sum(arr.slice()) */
+*/
 
 // Найти самый большой элемент
 
@@ -27,4 +16,4 @@ function findBiggest(list) {
   return list[0] > biggest ? list[0] : biggest;
 }
 
-console.log(findBiggest(list))
+console.log(findBiggest(list));

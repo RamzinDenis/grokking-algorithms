@@ -1,62 +1,73 @@
-//Start out with three hastables.
+const graph = {
+  start: {
+    a: 6,
+    b: 2,
+  },
+  a: {
+    end: 1,
+  },
+  b: {
+    a: 3,
+    end: 5,
+  },
+  end: {},
+};
 
-//First hashtable for the graph.
-const graph = {};
-graph["start"] = {};
-graph["start"]["a"] = 6;
-graph["start"]["b"] = 2;
+const costs = {
+  a: 6,
+  b: 2,
+  end: Infinity,
+};
 
-graph["a"] = {};
-graph["a"]["fin"] = 1;
+const parents = {
+  a: "start",
+  b: "start",
+  end: undefined,
+};
 
-graph["b"] = {};
-graph["b"]["a"] = 3;
-graph["b"]["fin"] = 5;
+const processed = [];
 
-graph["fin"] = {};
-
-//Second hashtable for the costs.
-
-const costs = {};
-costs["a"] = 6;
-costs["b"] = 2;
-costs["fin"] = Infinity;
-
-//Third hashtable for the parents of each node.
-const parents = {};
-parents["a"] = "start";
-parents["b"] = "start";
-parents["fin"] = null;
-
-let processed = [];
-
-const findLowestCostNode = (costs) => {
+function findLowestCostNode(costs) {
   let lowestCost = Infinity;
-  let lowestCostNode = null;
+  let lowestCostNode;
+
   for (let node in costs) {
-    let cost = costs[node];
-    if (cost < lowestCost && processed.indexOf(node) === -1) {
-      lowestCost = cost;
+    if (costs[node] < lowestCost && !processed.includes(node)) {
+      lowestCost = costs[node];
       lowestCostNode = node;
     }
   }
+
   return lowestCostNode;
-};
-
-node = findLowestCostNode(costs);
-
-while (node != null) {
-  let cost = costs[node];
-  let neighbors = graph[node];
-  Object.keys(neighbors).forEach(function (neighborNode) {
-    let newCost = cost + neighbors[neighborNode];
-    if (newCost < costs[neighborNode]) {
-      costs[neighborNode] = newCost;
-      parents[neighborNode] = node;
-    }
-  });
-  processed = processed.concat(node);
-
-  node = findLowestCostNode(costs);
 }
-console.log(costs, parents);
+
+function getToEnd() {
+  let node = findLowestCostNode(costs);
+  const cost = costs[node];
+
+  while (node) {
+    for (let neighborNode of Object.keys(graph[node])) {
+      const newCost = cost + graph[node][neighborNode];
+
+      if (newCost < costs[neighborNode]) {
+        parents[neighborNode] = node;
+        costs[neighborNode] = newCost;
+      }
+    }
+
+    processed.push(node);
+    node = findLowestCostNode(costs);
+  }
+
+  const path = [];
+  let key = parents.end;
+  for (let prop in parents) {
+    if (!parents[key]) break;
+    path.push(parents[key]);
+    key = parents[key];
+  }
+
+  return [parents.end, ...path].reverse();
+}
+
+console.log(getToEnd());
